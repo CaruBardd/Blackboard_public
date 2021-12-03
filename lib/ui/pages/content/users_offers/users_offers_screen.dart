@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:red_blackboard/domain/use_cases/controllers/user_offers.dart';
 import 'widgets/offer_card.dart';
 
 class UsersOffersScreen extends StatefulWidget {
@@ -11,11 +12,26 @@ class UsersOffersScreen extends StatefulWidget {
 }
 
 class _State extends State<UsersOffersScreen> {
-  final items = List<String>.generate(20, (i) => "Item $i");
+  final items = List<String>.generate(6, (i) => "Item $i");
+  final List<String> usuario = <String>[
+    'Julio Mendoza',
+    'Pedro Perez',
+    'Teresa Alvarez',
+    'Marcela Reyes',
+    'Delia Pinto',
+    'Jose Caceres'
+  ];
+  final List<String> comentario = <String>[
+    'Estoy feliz, la conferencia fue super buena',
+    'Mañana tenemos ponencia',
+    'Hola, quien tienes las memorias',
+    'Trabajando en mi ponencia',
+    'La conferencia estuvo regular',
+    'El lunes hay conferencia?'
+  ];
 
   @override
   Widget build(BuildContext context) {
-    Color primaryColor = Theme.of(context).colorScheme.primary;
     final controller = Controller(); // creando un objeto de tipo controller
     return ListView.builder(
       itemCount: items.length,
@@ -23,9 +39,8 @@ class _State extends State<UsersOffersScreen> {
         return Column(
           children: [
             PostCard(
-              title: 'Mariana Diaz',
-              content:
-                  'Estoy muy emocionada, me dieron el ascenso para celebrar los invito a mi casa esta noche.',
+              title: usuario[index],
+              content: comentario[index],
               picUrl:
                   'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPufXYXpGXbbx4deXcNgZVh-zudUpWJgqZhw&usqp=CAU', // foto de persona en la vista social
               onChat: () => {},
@@ -33,20 +48,21 @@ class _State extends State<UsersOffersScreen> {
             Row(
               children: [
                 IconButton(
-                  icon: Icon(
-                    Icons.exposure_neg_1,
-                    color: primaryColor,
+                  icon: const Icon(
+                    Icons.favorite, // icono de like
+                    color: Colors.red,
                   ),
-                  onPressed: () => controller.decrement(),
+                  onPressed: () => controller.increment(index, 1),
                 ),
+                Obx(() => Text("  ${controller.likes[index].value}")),
                 IconButton(
-                  icon: Icon(
-                    Icons.exposure_plus_1_outlined,
-                    color: primaryColor,
+                  icon: const Icon(
+                    Icons.favorite, // icono de dislike
+                    color: Colors.grey,
                   ),
-                  onPressed: () => controller.increment(),
+                  onPressed: () => controller.increment(index, 2),
                 ),
-                Obx(() => Text("      ${controller.count.value}")),
+                Obx(() => Text("  ${controller.dislikes[index].value}")),
               ],
             ),
           ],
@@ -56,16 +72,4 @@ class _State extends State<UsersOffersScreen> {
   }
 }
 
-class Controller extends GetxController {
-  var count = 0.obs;
-  void increment() {
-    count.value += 1;
-  }
-
-  void decrement() {
-    if (count.toInt() > 0) {
-      count.value -= 1;
-    }
-  }
-}
 //'https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200'

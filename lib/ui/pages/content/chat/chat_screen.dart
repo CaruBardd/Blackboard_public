@@ -10,11 +10,20 @@ class ChatScreen extends StatefulWidget {
 
 class _State extends State<ChatScreen> {
   final items = List<String>.generate(20, (i) => "Item $i");
-  final List<String> nombres = <String>['Juan', 'Pedro', 'Carlos', 'Elder'];
-  final List<String> estados = <String>['Estoy muy emocionado, me dieron el ascenso para celebrar los invito a mi casa esta noche.', 'Estoy muy emocionado ', 'Hola, cuando nos vemos', 'cuando es la conferencia'];
+  final List<String> nombres = <String>[
+    'Julio Mendoza',
+    'Pedro Perez',
+    'Teresa Alvarez',
+    'Marcela Reyes'
+  ];
+  final List<String> estados = <String>[
+    'Estoy muy emocionado, me dieron el ascenso para celebrar los invito a mi casa esta noche.',
+    'Estoy muy emocionado ',
+    'Hola, cuando nos vemos',
+    'Cuando es la conferencia'
+  ];
   @override
   Widget build(BuildContext context) {
-    Color primaryColor = Theme.of(context).colorScheme.primary;
     return ListView.builder(
       itemCount: nombres.length,
       itemBuilder: (context, index) {

@@ -3,8 +3,8 @@ import 'package:red_blackboard/domain/repositorires/auth.dart';
 class Auth implements AuthInterface {
   @override
   Future<bool> signIn({required String email, required String password}) async {
-    final emailVal = "barry.allen@example.com" == email;
-    final passwordVal = "SuperSecretPassword!" == password;
+    final emailVal = "blackboard@uninorte.co" == email;
+    final passwordVal = "1234567" == password;
     return emailVal && passwordVal;
   }
 
@@ -20,6 +20,7 @@ class Auth implements AuthInterface {
       required String password}) async {
     final emailVal = email.contains("@") && email.contains(".co");
     final passwordVal = password.length > 6;
+
     return emailVal && passwordVal;
   }
 }

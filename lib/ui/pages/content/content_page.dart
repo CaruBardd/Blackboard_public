@@ -12,6 +12,7 @@ import 'chat/chat_screen.dart';
 
 class ContentPage extends StatelessWidget {
   const ContentPage({Key? key}) : super(key: key);
+  
 
 // View content
   Widget _getScreen(int index) {
@@ -25,7 +26,7 @@ class ContentPage extends StatelessWidget {
       case 4:
         return const ChatScreen();
       default:
-        return const StatesScreen();
+      return const StatesScreen();
     }
   }
 
@@ -36,8 +37,9 @@ class ContentPage extends StatelessWidget {
     // Dependency injection: State management controller
     final UIController controller = Get.find<UIController>();
     final AuthController authController = Get.find<AuthController>();
-
+    
     return Scaffold(
+      
       appBar: CustomAppBar(
         picUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhhe-nFgc-p3C6hrqE8gC4nb-LTQYHsqN_hvvXwRF6Gak1WlXXnv1XXk4p85L2i65qIK0&usqp=CAU', // foto del usuario principal que aparece en la parte superior 
         tile: const Text("Red Blackboard Public"), // red de amigos para ver estados

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'widgets/state_card.dart';
 
 class StatesScreen extends StatefulWidget {
   // StatesScreen empty constructor
@@ -11,43 +10,39 @@ class StatesScreen extends StatefulWidget {
 
 class _State extends State<StatesScreen> {
   final items = List<String>.generate(20, (i) => "Item $i");
+  final List<String> nombres = <String>[
+    'Julio Mendoza',
+    'Pedro Perez',
+    'Teresa Alvarez',
+    'Marcela Reyes',
+    'Delia Pinto',
+    'Jose Caceres'
+  ];
+  final List<String> estados = <String>[
+    'El evento se realizará el miércoles a las 4:00 p.m.',
+    'La ponencia de mintic fue muy buena',
+    'No vemos en la conferencia de Flutter',
+    'Hoy el evento salió bien he cerrado un negocio',
+    'Adquiriendo nuevos conocimientos',
+    'Super conectado para la conferencia de Misión Tic'
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-  primary: false,
-  padding: const EdgeInsets.all(20),
-  crossAxisSpacing: 10,
-  mainAxisSpacing: 10,
-  crossAxisCount: 2,
-  children: <Widget>[
-    Container(
-      padding: const EdgeInsets.all(8),
-      child: const Text("Mi estado \n\n El evento se realizará el miércoles  a las 4:00 p.m."),
-      
-      color: Colors.cyan[300],
-    ),
-    Container(
-      padding: const EdgeInsets.all(8),
-      child: const Text("Pedro Perez\n\n La ponencia de mintic fue muy buena"),
-      color: Colors.cyan[300],
-    ),
-    Container(
-      padding: const EdgeInsets.all(8),
-      child: const Text('Tereza Alvarez\n\n No vemos en la conferencia de  Flutter'),
-      color: Colors.cyan[300],
-    ),
-    Container(
-      padding: const EdgeInsets.all(8),
-      child: const Text('Marcela Reyes\n\n Hoy el evento salió bien he cerrado un negocio '),
-      color: Colors.cyan[300],
-    ),
-    
-    
-  ],
-);
-
+    return GridView.builder(
+      itemCount: estados.length, // The length Of the array
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        mainAxisExtent: 200,
+        crossAxisCount: 2,
+        childAspectRatio: 0.6,
+        crossAxisSpacing: 10,
+        mainAxisSpacing: 10,
+      ), // The size of the grid box
+      itemBuilder: (context, index) => Container(
+        padding: const EdgeInsets.all(8),
+        child: Text(nombres[index] + "\n\n" + " \n\n" + estados[index]),
+        color: Colors.cyan[300],
+      ),
+    );
   }
 }
-
-

@@ -9,16 +9,16 @@ void main() {
   });
 
   test('auth-signin', () async {
-    final result = await auth.signIn(
-        email: "barry.allen@example.com", password: "SuperSecretPassword!");
+    final result =
+        await auth.signIn(email: "blackboard@uninorte.co", password: "1234567");
     expect(result, true);
   });
 
   test('auth-signup', () async {
     final result = await auth.signUp(
         name: "Barry Allen",
-        email: "barry.allen@example.com",
-        password: "SuperSecretPassword!");
+        email: "barry.allen@example.comentar",
+        password: "Superheroe");
     expect(result, true);
   });
 

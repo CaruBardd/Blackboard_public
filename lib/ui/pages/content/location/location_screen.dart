@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:red_blackboard/domain/use_cases/controllers/location.dart';
 import 'widgets/location_card.dart';
 
 class LocationScreen extends StatefulWidget {
@@ -11,9 +13,18 @@ class LocationScreen extends StatefulWidget {
 
 class _State extends State<LocationScreen> {
   final items = List<String>.generate(8, (i) => "Item $i");
+  final List<String> nombres = <String>[
+    'Julio Mendoza',
+    'Pedro Perez',
+    'Teresa Alvarez',
+    'Marcela Reyes'
+  ];
+
+  final List<double> distancia = <double>[5, 10, 8, 50];
 
   @override
   Widget build(BuildContext context) {
+    final controller = Controller(); // creando un objeto de tipo controller
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -22,8 +33,8 @@ class _State extends State<LocationScreen> {
           LocationCard(
             key: const Key("myLocationCard"),
             title: 'MI UBICACIÓN',
-            lat: 11.004556423794284,
-            long: -74.7217010498047,
+            lat: 11.004,
+            long: -74.721323,
             onUpdate: () {},
           ),
           Padding(
@@ -35,15 +46,18 @@ class _State extends State<LocationScreen> {
           ),
           // ListView on remaining screen space
           ListView.builder(
-            itemCount: items.length,
+            itemCount: nombres.length,
             itemBuilder: (context, index) {
-              return LocationCard(
-                title: 'Mariano Diaz',
-                lat: 11.004556423794284,
-                long: -74.7217010498047,
-                distance: 25,
-                onUpdate: () {},
-              );
+              //index es la variable iteradora: puede ser [0,1,2,3...n], donde n es la posicion final la lista
+              return Obx(() => LocationCard(
+                    title: nombres[index],
+                    lat: controller.latitud[index].value,
+                    long: controller.longitud[index].value,
+                    distance: controller.distancia[index].value,
+                    onUpdate: () {
+                      controller.updateLocation(index);
+                    },
+                  ));
             },
             // Avoid scrollable inside scrollable
             shrinkWrap: true,
