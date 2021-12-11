@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:red_blackboard/domain/use_cases/auth_management.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
+import 'package:red_blackboard/domain/use_cases/controllers/internet_connection.dart';
 
 class LoginScreen extends StatefulWidget {
   final VoidCallback onViewSwitch;
@@ -16,6 +17,7 @@ class _State extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final controller = Get.find<AuthController>();
+  final networkController = Get.find<InternetConnectionController>();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,9 @@ class _State extends State<LoginScreen> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               "Iniciar sesión",
-              style: Theme.of(context).textTheme.headline1, // texto o tipo de letra
+              style: Theme.of(context)
+                  .textTheme
+                  .headline1, // texto o tipo de letra
             ),
           ),
           Padding(
@@ -64,10 +68,18 @@ class _State extends State<LoginScreen> {
                   child: ElevatedButton(
                     child: const Text("Login"), // boton de login
                     onPressed: () async {
-                      var result = await AuthManagement.signIn(
-                          email: emailController.text,
-                          password: passwordController.text);
-                      controller.authenticated = result;
+                      if (networkController.connectionType != 0) {
+                        var result = await AuthManagement.signIn(
+                            email: emailController.text,
+                            password: passwordController.text);
+                        controller.authenticated = result;
+                      } else {
+                        Get.showSnackbar(const GetSnackBar(
+                          message:
+                              "Debe estar conectado a internet para realizar esta acción.",
+                          duration: Duration(seconds: 2),
+                        ));
+                      }
                     },
                   ),
                 ),

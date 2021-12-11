@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:red_blackboard/domain/services/internet_connection_binding.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/ui.dart';
 import 'package:red_blackboard/ui/pages/authentication/auth_page.dart';
@@ -15,6 +16,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     _stateManagementInit();
     return GetMaterialApp(
+      // Inyección de Binding de Internet Connection
+      initialBinding: InternetConnectionBinding(),
       title: 'Blackboard Public',
       // Quitamos el banner DEBUG
       debugShowCheckedModeBanner: false,
@@ -28,7 +31,7 @@ class App extends StatelessWidget {
       // We add the two possible routes
       routes: {
         '/auth': (context) => const AuthenticationPage(),
-        '/content': (context) => const ContentPage(),
+        '/content': (context) => ContentPage(),
       },
     );
   }

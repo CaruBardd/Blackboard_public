@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:red_blackboard/domain/models/internet_connection_content.dart';
 
 class StatesScreen extends StatefulWidget {
   // StatesScreen empty constructor
@@ -8,7 +9,7 @@ class StatesScreen extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<StatesScreen> {
+class _State extends State<StatesScreen> with InternetConnectionContent{
   final items = List<String>.generate(20, (i) => "Item $i");
   final List<String> nombres = <String>[
     'Julio Mendoza',
@@ -27,8 +28,13 @@ class _State extends State<StatesScreen> {
     'Super conectado para la conferencia de Misión Tic'
   ];
 
-  @override
+@override
   Widget build(BuildContext context) {
+    return isConnected();
+  }
+
+  @override
+  Widget mainWidget() {
     return GridView.builder(
       itemCount: estados.length, // The length Of the array
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(

@@ -12,7 +12,7 @@ void main() {
 
     // This is a helper method for avoid network usage on NetworkImage
     await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(const GetMaterialApp(home: ContentPage()));
+      await tester.pumpWidget(GetMaterialApp(home: ContentPage()));
       await tester.pump();
       await tester.tap(section);
       await tester.pumpAndSettle();
@@ -28,7 +28,7 @@ void main() {
 
     // This is a helper method for avoid network usage on NetworkImage
     await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(const GetMaterialApp(home: ContentPage()));
+      await tester.pumpWidget(GetMaterialApp(home: ContentPage()));
       await tester.pump();
       await tester.tap(section);
       await tester.pumpAndSettle();
@@ -44,7 +44,7 @@ void main() {
 
     // This is a helper method for avoid network usage on NetworkImage
     await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(const GetMaterialApp(home: ContentPage()));
+      await tester.pumpWidget(GetMaterialApp(home: ContentPage()));
       await tester.pump();
       await tester.tap(section);
       await tester.pumpAndSettle();
@@ -61,7 +61,7 @@ void main() {
 
     // This is a helper method for avoid network usage on NetworkImage
     await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(const GetMaterialApp(home: ContentPage()));
+      await tester.pumpWidget(GetMaterialApp(home: ContentPage()));
       await tester.pump();
       await tester.tap(section);
       await tester.pumpAndSettle();
@@ -79,7 +79,7 @@ void main() {
 
     // This is a helper method for avoid network usage on NetworkImage
     await mockNetworkImagesFor(() async {
-      await tester.pumpWidget(const GetMaterialApp(home: ContentPage()));
+      await tester.pumpWidget(GetMaterialApp(home: ContentPage()));
       await tester.pump();
       await tester.tap(section);
       await tester.pumpAndSettle();

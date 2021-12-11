@@ -58,3 +58,47 @@ class CustomAppBar extends AppBar {
           ],
         );
 }
+
+class DisconnectedAppBar extends AppBar {
+  final BuildContext context;
+  final Widget tile;
+  final VoidCallback onSignOff;
+
+  // Creating a custom AppBar that extends from Appbar with super();
+  DisconnectedAppBar(
+      {Key? key,
+      required this.context,
+      required this.tile,
+      required this.onSignOff})
+      : super(
+          key: key,
+          centerTitle: true,
+          leading: const Center(
+            child: CircleAvatar(
+              minRadius: 18.0,
+              maxRadius: 18.0,
+              child: Icon(Icons.person_off_outlined),
+            ),
+          ),
+          title: tile,
+          actions: [
+            IconButton(
+              key: const Key("themeAction"),
+              icon: const Icon(
+                Icons.brightness_4_rounded,
+              ),
+              onPressed: () {
+                Get.changeThemeMode(
+                    Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+              },
+            ),
+            IconButton(
+              key: const Key("logoutAction"),
+              icon: const Icon(
+                Icons.logout,
+              ),
+              onPressed: onSignOff,
+            )
+          ],
+        );
+}

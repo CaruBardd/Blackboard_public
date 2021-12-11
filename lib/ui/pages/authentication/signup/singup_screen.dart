@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:red_blackboard/domain/use_cases/auth_management.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
+import 'package:red_blackboard/domain/use_cases/controllers/internet_connection.dart';
 
 class SignUpScreen extends StatefulWidget {
   final VoidCallback onViewSwitch;
@@ -17,6 +18,7 @@ class _State extends State<SignUpScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final controller = Get.find<AuthController>();
+  final networkController = Get.find<InternetConnectionController>();
 
   @override
   Widget build(BuildContext context) {
@@ -75,11 +77,19 @@ class _State extends State<SignUpScreen> {
                   padding: const EdgeInsets.all(14.0),
                   child: ElevatedButton(
                     onPressed: () async {
-                      var result = await AuthManagement.signUp(
-                          name: nameController.text,
-                          email: emailController.text,
-                          password: passwordController.text);
-                      controller.authenticated = result;
+                      if (networkController.connectionType != 0) {
+                        var result = await AuthManagement.signUp(
+                            name: nameController.text,
+                            email: emailController.text,
+                            password: passwordController.text);
+                        controller.authenticated = result;
+                      } else {
+                        Get.showSnackbar(const GetSnackBar(
+                          message:
+                              "Debe estar conectado a internet para realizar esta acción.",
+                          duration: Duration(seconds: 2),
+                        ));
+                      }
                     },
                     child: const Text("Registrarse"),
                   ),

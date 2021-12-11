@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:red_blackboard/domain/models/internet_connection_content.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/user_offers.dart';
 import 'widgets/offer_card.dart';
 
@@ -11,7 +12,7 @@ class UsersOffersScreen extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<UsersOffersScreen> {
+class _State extends State<UsersOffersScreen> with InternetConnectionContent{
   final items = List<String>.generate(6, (i) => "Item $i");
   final List<String> usuario = <String>[
     'Julio Mendoza',
@@ -30,8 +31,13 @@ class _State extends State<UsersOffersScreen> {
     'El lunes hay conferencia?'
   ];
 
-  @override
+@override
   Widget build(BuildContext context) {
+    return isConnected();
+  }
+
+  @override
+  Widget mainWidget() {
     final controller = Controller(); // creando un objeto de tipo controller
     return ListView.builder(
       itemCount: items.length,

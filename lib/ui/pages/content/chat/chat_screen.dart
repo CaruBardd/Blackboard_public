@@ -1,3 +1,4 @@
+import 'package:red_blackboard/domain/models/internet_connection_content.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -8,7 +9,7 @@ class ChatScreen extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<ChatScreen> {
+class _State extends State<ChatScreen> with InternetConnectionContent{
   final items = List<String>.generate(20, (i) => "Item $i");
   final List<String> nombres = <String>[
     'Julio Mendoza',
@@ -22,8 +23,14 @@ class _State extends State<ChatScreen> {
     'Hola, cuando nos vemos',
     'Cuando es la conferencia'
   ];
-  @override
+ 
+   @override
   Widget build(BuildContext context) {
+    return isConnected();
+  }
+
+  @override
+  Widget mainWidget() {
     return ListView.builder(
       itemCount: nombres.length,
       itemBuilder: (context, index) {

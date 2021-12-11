@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:red_blackboard/domain/models/internet_connection_content.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/location.dart';
 import 'widgets/location_card.dart';
 
@@ -11,7 +12,7 @@ class LocationScreen extends StatefulWidget {
   _State createState() => _State();
 }
 
-class _State extends State<LocationScreen> {
+class _State extends State<LocationScreen> with InternetConnectionContent{
   final items = List<String>.generate(8, (i) => "Item $i");
   final List<String> nombres = <String>[
     'Julio Mendoza',
@@ -22,8 +23,13 @@ class _State extends State<LocationScreen> {
 
   final List<double> distancia = <double>[5, 10, 8, 50];
 
-  @override
+@override
   Widget build(BuildContext context) {
+    return isConnected();
+  }
+
+  @override
+  Widget mainWidget() {
     final controller = Controller(); // creando un objeto de tipo controller
     return SingleChildScrollView(
       child: Column(
