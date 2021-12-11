@@ -1,19 +1,42 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:red_blackboard/domain/repositorires/auth.dart';
 
 class Auth implements AuthInterface {
-  @override
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  @override //logiar
   Future<bool> signIn({required String email, required String password}) async {
-    final emailVal = "blackboard@uninorte.co" == email;
+    /*final emailVal = "blackboard@uninorte.co" == email;
     final passwordVal = "1234567" == password;
-    return emailVal && passwordVal;
+    return emailVal && passwordVal;*/
+    try {
+      UserCredential user = await _firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+         if (user.user != null) {
+        print('login success');
+        return true;
+      }
+      print('credenciales no validas');
+      return false;
+    } on FirebaseAuthException catch (e) {
+      print(e.code);
+      return false;
+    }
   }
 
-  @override
+  @override // deslogiar
   Future<bool> signOut() async {
-    return true;
+    try {
+      await FirebaseAuth.instance.signOut();
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
   }
 
-  @override
+  @override // no se uso
   Future<bool> signUp(
       {required String name,
       required String email,

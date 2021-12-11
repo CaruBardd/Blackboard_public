@@ -9,8 +9,8 @@ void main() {
     () async {
       expect(
           await AuthManagement.signIn(
-              email: "barry.allen@example.co",
-              password: "SuperSecret"),
+              email: "barry.allen@example.com",
+              password: "SuperSecretPassword!"),
           true);
     },
   );

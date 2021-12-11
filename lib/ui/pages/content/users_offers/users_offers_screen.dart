@@ -57,7 +57,7 @@ class _State extends State<UsersOffersScreen> {
                 Obx(() => Text("  ${controller.likes[index].value}")),
                 IconButton(
                   icon: const Icon(
-                    Icons.favorite, // icono de dislike
+                    Icons.favorite, // icono de like
                     color: Colors.grey,
                   ),
                   onPressed: () => controller.increment(index, 2),

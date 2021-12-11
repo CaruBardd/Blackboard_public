@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:red_blackboard/domain/use_cases/auth_management.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/ui.dart';
 import 'package:red_blackboard/ui/pages/content/location/location_screen.dart';
@@ -12,7 +13,6 @@ import 'chat/chat_screen.dart';
 
 class ContentPage extends StatelessWidget {
   const ContentPage({Key? key}) : super(key: key);
-  
 
 // View content
   Widget _getScreen(int index) {
@@ -26,7 +26,7 @@ class ContentPage extends StatelessWidget {
       case 4:
         return const ChatScreen();
       default:
-      return const StatesScreen();
+        return const StatesScreen();
     }
   }
 
@@ -37,15 +37,20 @@ class ContentPage extends StatelessWidget {
     // Dependency injection: State management controller
     final UIController controller = Get.find<UIController>();
     final AuthController authController = Get.find<AuthController>();
-    
+
     return Scaffold(
-      
       appBar: CustomAppBar(
-        picUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhhe-nFgc-p3C6hrqE8gC4nb-LTQYHsqN_hvvXwRF6Gak1WlXXnv1XXk4p85L2i65qIK0&usqp=CAU', // foto del usuario principal que aparece en la parte superior 
-        tile: const Text("Red Blackboard Public"), // red de amigos para ver estados
+        picUrl:
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhhe-nFgc-p3C6hrqE8gC4nb-LTQYHsqN_hvvXwRF6Gak1WlXXnv1XXk4p85L2i65qIK0&usqp=CAU', // foto del usuario principal que aparece en la parte superior
+        tile: const Text(
+            "Red Blackboard Public"), // red de amigos para ver estados
         context: context,
-        onSignOff: () {
-          authController.authenticated = false;
+        onSignOff: () async {
+          var result = await AuthManagement.signOut();
+          print(result);
+          if (result) {
+            authController.authenticated = false;
+          }
         },
       ),
       body: SafeArea(

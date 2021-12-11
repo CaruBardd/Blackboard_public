@@ -5,6 +5,7 @@ import 'package:red_blackboard/domain/use_cases/controllers/ui.dart';
 import 'package:red_blackboard/ui/pages/authentication/auth_page.dart';
 import 'package:red_blackboard/ui/pages/content/content_page.dart';
 import 'package:red_blackboard/ui/theme/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
@@ -32,12 +33,27 @@ class App extends StatelessWidget {
     );
   }
 
-  void _stateManagementInit() {
+  Future<void> _stateManagementInit() async {
     // Dependency Injection
     Get.put(UIController());
     AuthController authController = Get.put(AuthController());
     // Watching auth state changes
     // State management: listening for changes on using the reactive var
+
+    //Obtener tema de SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    dynamic theme = prefs.getString("theme");
+    var test = prefs.getString("asd");
+    print(theme);
+
+    if (theme != null) {
+      if (theme == "dark") {
+        Get.changeThemeMode(ThemeMode.dark);
+      } else {
+        Get.changeThemeMode(ThemeMode.light);
+      }
+    }
+
     ever(authController.reactiveAuth, (bool authenticated) {
       // Using Get.off so we can't go back when auth changes
       // This navigation triggers automatically when auth state changes on the app state

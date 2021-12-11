@@ -3,7 +3,7 @@ import 'package:red_blackboard/data/repositories/auth.dart';
 class AuthManagement {
   static final Auth _auth = Auth();
 
-  static Future<bool>  signIn(
+  static Future<bool> signIn(
       {required String email, required String password}) async {
     try {
       return await _auth.signIn(email: email, password: password);

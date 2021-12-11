@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomAppBar extends AppBar {
   final BuildContext context;
@@ -31,9 +32,20 @@ class CustomAppBar extends AppBar {
               icon: const Icon(
                 Icons.brightness_4_rounded,
               ),
-              onPressed: () {
+              onPressed: () async {
+                /* var currentTheme = Get.isDarkMode ? "dark" : "light"; */
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                /* prefs.setString("theme", currentTheme); */
                 Get.changeThemeMode(
                     Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+                if (!Get.isDarkMode) {
+                  prefs.setString("theme", "dark");
+                } else {
+                  prefs.setString("theme", "light");
+                }
+
+                dynamic theme = prefs.getString("theme");
+                print("El tema es: " + theme);
               },
             ),
             IconButton(

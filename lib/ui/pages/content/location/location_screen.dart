@@ -34,7 +34,7 @@ class _State extends State<LocationScreen> {
             key: const Key("myLocationCard"),
             title: 'MI UBICACIÓN',
             lat: 11.004,
-            long: -74.721323,
+            long: -74.721,
             onUpdate: () {},
           ),
           Padding(
