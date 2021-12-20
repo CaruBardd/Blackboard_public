@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:red_blackboard/domain/models/internet_connection_content.dart';
 import 'package:red_blackboard/domain/use_cases/auth_management.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
@@ -15,6 +16,7 @@ import 'chat/chat_screen.dart';
 class ContentPage extends StatelessWidget with InternetConnectionContent {
   ContentPage({Key? key}) : super(key: key);
   var _context;
+  bool _locationPermissionAccess = false;
 
 // View content
   Widget _getScreen(int index) {
@@ -24,12 +26,73 @@ class ContentPage extends StatelessWidget with InternetConnectionContent {
       case 2:
         return const SocialEventsScreen();
       case 3:
-        return const LocationScreen();
+        return _verifyPermissions(
+            _locationPermissionAccess, const LocationScreen());
       case 4:
         return const ChatScreen();
       default:
         return const StatesScreen();
     }
+  }
+
+  Widget _verifyPermissions(bool permissionAccess, Widget nextPage) {
+    _isLocationPermissionAcces();
+    if (permissionAccess == false) {
+      return _solicitarPermisos();
+    } else if (permissionAccess == true) {
+      return nextPage;
+    } else {
+      return const Center(child: CircularProgressIndicator());
+    }
+  }
+
+  _isLocationPermissionAcces() async {
+    if (await Permission.location.request().isGranted) {
+      _locationPermissionAccess = true;
+    } else if (await Permission.speech.isPermanentlyDenied) {
+      _locationPermissionAccess = false;
+    } else {
+      _locationPermissionAccess = false;
+    }
+  }
+
+  Widget _solicitarPermisos() {
+    return Center(
+      child: Container(
+          margin: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Expanded(
+                flex: 1,
+                child: SizedBox(),
+              ),
+              Expanded(
+                flex: 2,
+                child: IconButton(
+                  icon: const Icon(Icons.location_disabled_outlined),
+                  onPressed: () => openAppSettings(),
+                ),
+              ),
+              const Expanded(
+                flex: 1,
+                child: SizedBox(),
+              ),
+              const Expanded(
+                flex: 6,
+                child: Text(
+                    'No haz concedido los permisos suficientes para realizar esta acción, por favor verificar'),
+              ),
+              const Expanded(
+                flex: 1,
+                child: SizedBox(),
+              )
+            ],
+          )),
+    );
   }
 
   // We create a Scaffold that is used for all the content pages
