@@ -2,8 +2,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:red_blackboard/domain/models/internet_connection_content.dart';
+import 'package:red_blackboard/domain/models/location_mode.dart';
+import 'package:red_blackboard/domain/models/record.dart';
 //import 'package:red_blackboard/domain/models/location_database.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/location.dart';
+import 'package:red_blackboard/domain/use_cases/controllers/firestore_controller.dart';
 //import 'package:red_blackboard/domain/use_cases/controllers/location_controller.dart';
 import 'widgets/location_card.dart';
 
@@ -18,8 +21,8 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _State extends State<LocationScreen> with InternetConnectionContent {
-  //var locationController = Get.put(LocationController());
-  //late Future<List<Location>> futureLocations;
+  var _locationController = Get.put(FirebaseController());
+  late Future<List<LocationModel>> futureLocations;
   var _controller = Get.put(Controller());
   var _context;
   final items = List<String>.generate(8, (i) => "Item $i");
@@ -35,25 +38,25 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
   @override
   void initState() {
     super.initState();
-    //locationController.start();
+    _locationController.suscribeUpdates();
   }
 
   @override
   void dispose() {
-    //locationController.stop();
+    _locationController.unsuscribeUpdates();
     super.dispose();
   }
 
-  /*Widget _list() {
+  Widget _list() {
     return Obx(() {
-      if (locationController.locations.length > 0) {
-        return GetX<LocationController>(builder: (builderController) {
+      if (_locationController.entries.length > 0) {
+        return GetX<FirebaseController>(builder: (builderController) {
           return ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              itemCount: locationController.locations.length,
+              itemCount: _locationController.entries.length,
               itemBuilder: (_context, index) {
-                var element = locationController.locations[index];
+                var element = _locationController.entries[index];
                 return LocationCard(
                     title: element.user,
                     lat: element.latitud,
@@ -63,37 +66,41 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
       } else {
         return Center(
           child: Container(
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
-              Expanded(
-                flex: 2,
-                child: Icon(Icons.location_disabled_outlined),
-              ),
-              Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
-              Expanded(
-                flex: 6,
-                child: Text('No tienes amigos cerca.'),
-              ),
-              Expanded(
-                flex: 1,
-                child: SizedBox(),
-              )
-            ],
-          )),
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Icon(
+                      Icons.location_disabled_outlined,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: Text('No tienes amigos cerca.'),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  )
+                ],
+              )),
         );
       }
     });
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +116,12 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
         mainAxisSize: MainAxisSize.min,
         children: [
           LocationCard(
-              key: const Key("myLocationCard"),
-              title: 'MI UBICACIÓN',
-              lat: 11.004,
-              long: -74.721,
-              onUpdate: () => {} //locationController.shareLocation(10, -3.43),
-              ),
+            key: const Key("myLocationCard"),
+            title: 'MI UBICACIÓN',
+            lat: 11.004,
+            long: -74.721,
+            onUpdate: () => _locationController.addEntry(10.45, 56.21),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Text(
@@ -122,9 +129,9 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
               style: Theme.of(context).textTheme.headline1,
             ),
           ),
-          //_list()
+          _list()
           // ListView on remaining screen space
-          ListView.builder(
+          /*ListView.builder(
             itemCount: nombres.length,
             itemBuilder: (context, index) {
               //index es la variable iteradora: puede ser [0,1,2,3...n], donde n es la posicion final la lista
@@ -141,7 +148,7 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
             // Avoid scrollable inside scrollable
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-          ),
+          ),*/
         ],
       ),
     );
