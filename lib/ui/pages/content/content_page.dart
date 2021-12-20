@@ -4,19 +4,21 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:red_blackboard/domain/models/internet_connection_content.dart';
 import 'package:red_blackboard/domain/use_cases/auth_management.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
+import 'package:red_blackboard/domain/use_cases/controllers/permissions_controller.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/ui.dart';
 import 'package:red_blackboard/ui/pages/content/location/location_screen.dart';
 import 'package:red_blackboard/ui/pages/content/public_offers/social_events_screen.dart';
 import 'package:red_blackboard/ui/pages/content/states/states_screen.dart';
 import 'package:red_blackboard/ui/pages/content/users_offers/users_offers_screen.dart';
 import 'package:red_blackboard/ui/widgets/appbar.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'chat/chat_screen.dart';
 
 class ContentPage extends StatelessWidget with InternetConnectionContent {
   ContentPage({Key? key}) : super(key: key);
+  var _permissions = Get.put(PermissionsController());
   var _context;
-  bool _locationPermissionAccess = false;
 
 // View content
   Widget _getScreen(int index) {
@@ -26,8 +28,14 @@ class ContentPage extends StatelessWidget with InternetConnectionContent {
       case 2:
         return const SocialEventsScreen();
       case 3:
-        return _verifyPermissions(
-            _locationPermissionAccess, const LocationScreen());
+        return Obx(() {
+          _permissions.requestPermissions('location');
+          if (_permissions.location.value) {
+            return LocationScreen();
+          } else {
+            return _solicitarPermisos(_context);
+          }
+        });
       case 4:
         return const ChatScreen();
       default:
@@ -35,73 +43,83 @@ class ContentPage extends StatelessWidget with InternetConnectionContent {
     }
   }
 
-  Widget _verifyPermissions(bool permissionAccess, Widget nextPage) {
-    _isLocationPermissionAcces();
-    if (permissionAccess == false) {
-      return _solicitarPermisos();
-    } else if (permissionAccess == true) {
-      return nextPage;
-    } else {
-      return const Center(child: CircularProgressIndicator());
-    }
-  }
-
-  _isLocationPermissionAcces() async {
-    if (await Permission.location.request().isGranted) {
-      _locationPermissionAccess = true;
-    } else if (await Permission.speech.isPermanentlyDenied) {
-      _locationPermissionAccess = false;
-    } else {
-      _locationPermissionAccess = false;
-    }
-  }
-
-  Widget _solicitarPermisos() {
-    return Center(
-      child: Container(
-          margin: const EdgeInsets.all(10.0),
-          padding: const EdgeInsets.all(10.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
-              Expanded(
-                flex: 2,
-                child: IconButton(
-                  icon: const Icon(Icons.location_disabled_outlined),
-                  onPressed: () => openAppSettings(),
-                ),
-              ),
-              const Expanded(
-                flex: 1,
-                child: SizedBox(),
-              ),
-              const Expanded(
-                flex: 6,
-                child: Text(
-                    'No haz concedido los permisos suficientes para realizar esta acción, por favor verificar'),
-              ),
-              const Expanded(
-                flex: 1,
-                child: SizedBox(),
-              )
-            ],
-          )),
-    );
-  }
-
-  // We create a Scaffold that is used for all the content pages
-  // We only define one AppBar, and one scaffold.
   @override
   Widget build(BuildContext context) {
     _context = context;
     return isConnected();
   }
+
+  Widget _solicitarPermisos(BuildContext context) {
+    return Center(
+      child: Container(
+        margin: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(10.0),
+        child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Icon(Icons.location_disabled_outlined),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                  Expanded(
+                    flex: 6,
+                    child: Text(
+                        'No haz concedido los permisos suficientes para realizar esta acción, por favor verificar'),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  )
+                ],
+              ),
+              Row(
+                children: const [
+                  SizedBox(
+                    height: 12,
+                  )
+                ],
+              ),
+              Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: ElevatedButton(
+                        child: Text(
+                          'Revisar permisos',
+                          style: GoogleFonts.openSans(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                        onPressed: (() => openAppSettings()),
+                      ),
+                    )
+                  ])
+            ]),
+      ),
+    );
+  }
+
+  // We create a Scaffold that is used for all the content pages
+  // We only define one AppBar, and one scaffold.
 
   @override
   Widget mainWidget() {

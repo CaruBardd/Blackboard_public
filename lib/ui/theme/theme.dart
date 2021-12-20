@@ -20,6 +20,7 @@ class MyTheme {
         border: const OutlineInputBorder(),
         fillColor: Colors.grey.shade300,
       ),
+      buttonColor: AppColors.lightScheme.primary,
     );
   }
 
@@ -43,6 +44,7 @@ class MyTheme {
       ),
       // copy from ligthTheme
       inputDecorationTheme: ligthTheme.inputDecorationTheme,
+      buttonColor: AppColors.lightScheme.primary,
     );
   }
 }

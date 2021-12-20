@@ -1,11 +1,10 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:red_blackboard/domain/models/internet_connection_content.dart';
-import 'package:red_blackboard/domain/models/location_database.dart';
+//import 'package:red_blackboard/domain/models/location_database.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/location.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/location_controller.dart';
+//import 'package:red_blackboard/domain/use_cases/controllers/location_controller.dart';
 import 'widgets/location_card.dart';
 
 final databaseRef = FirebaseDatabase.instance.reference();
@@ -19,8 +18,9 @@ class LocationScreen extends StatefulWidget {
 }
 
 class _State extends State<LocationScreen> with InternetConnectionContent {
-  var locationController = Get.put(LocationController());
-  late Future<List<Location>> futureLocations;
+  //var locationController = Get.put(LocationController());
+  //late Future<List<Location>> futureLocations;
+  var _controller = Get.put(Controller());
   var _context;
   final items = List<String>.generate(8, (i) => "Item $i");
   final List<String> nombres = <String>[
@@ -35,16 +35,16 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
   @override
   void initState() {
     super.initState();
-    locationController.start();
+    //locationController.start();
   }
 
   @override
   void dispose() {
-    locationController.stop();
+    //locationController.stop();
     super.dispose();
   }
 
-  Widget _list() {
+  /*Widget _list() {
     return Obx(() {
       if (locationController.locations.length > 0) {
         return GetX<LocationController>(builder: (builderController) {
@@ -93,7 +93,7 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
         );
       }
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -109,12 +109,12 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
         mainAxisSize: MainAxisSize.min,
         children: [
           LocationCard(
-            key: const Key("myLocationCard"),
-            title: 'MI UBICACIÓN',
-            lat: 11.004,
-            long: -74.721,
-            onUpdate: () => locationController.shareLocation(10, -3.43),
-          ),
+              key: const Key("myLocationCard"),
+              title: 'MI UBICACIÓN',
+              lat: 11.004,
+              long: -74.721,
+              onUpdate: () => {} //locationController.shareLocation(10, -3.43),
+              ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12.0),
             child: Text(
@@ -122,27 +122,26 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
               style: Theme.of(context).textTheme.headline1,
             ),
           ),
-          _list()
+          //_list()
           // ListView on remaining screen space
-          /*ListView.builder(
-              itemCount: nombres.length,
-              itemBuilder: (context, index) {
-                //index es la variable iteradora: puede ser [0,1,2,3...n], donde n es la posicion final la lista
-                return Obx(() => LocationCard(
-                      title: nombres[index],
-                      lat: controller.latitud[index].value,
-                      long: controller.longitud[index].value,
-                      distance: controller.distancia[index].value,
-                      onUpdate: () {
-                        controller.updateLocation(index);
-                      },
-                    ));
-              },
-              // Avoid scrollable inside scrollable
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-            ),
-            */
+          ListView.builder(
+            itemCount: nombres.length,
+            itemBuilder: (context, index) {
+              //index es la variable iteradora: puede ser [0,1,2,3...n], donde n es la posicion final la lista
+              return Obx(() => LocationCard(
+                    title: nombres[index],
+                    lat: _controller.latitud[index].value,
+                    long: _controller.longitud[index].value,
+                    distance: _controller.distancia[index].value,
+                    onUpdate: () {
+                      _controller.updateLocation(index);
+                    },
+                  ));
+            },
+            // Avoid scrollable inside scrollable
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+          ),
         ],
       ),
     );
