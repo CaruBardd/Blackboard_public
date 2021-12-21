@@ -5,7 +5,6 @@ import 'package:red_blackboard/domain/models/internet_connection_content.dart';
 import 'package:red_blackboard/domain/models/location_mode.dart';
 import 'package:red_blackboard/domain/models/record.dart';
 //import 'package:red_blackboard/domain/models/location_database.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/location.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/firestore_controller.dart';
 //import 'package:red_blackboard/domain/use_cases/controllers/location_controller.dart';
 import 'widgets/location_card.dart';
@@ -23,7 +22,6 @@ class LocationScreen extends StatefulWidget {
 class _State extends State<LocationScreen> with InternetConnectionContent {
   var _locationController = Get.put(FirebaseController());
   late Future<List<LocationModel>> futureLocations;
-  var _controller = Get.put(Controller());
   var _context;
   final items = List<String>.generate(8, (i) => "Item $i");
   final List<String> nombres = <String>[

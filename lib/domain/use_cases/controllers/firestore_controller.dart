@@ -13,6 +13,7 @@ class FirebaseController extends GetxController {
   final Stream<QuerySnapshot> _usersStream =
       FirebaseFirestore.instance.collection('locations').snapshots();
   late StreamSubscription<Object?> streamSubscription;
+  var _addedEntries = <String>[];
 
   suscribeUpdates() async {
     logInfo('suscribeLocationUpdates');
@@ -34,18 +35,58 @@ class FirebaseController extends GetxController {
 
   addEntry(latitud, longitud) {
     String user = FirebaseAuth.instance.currentUser!.uid;
-    locations
-        .add({'user': user, 'latitud': latitud, 'longitud': longitud})
-        .then((value) => print("locations added"))
-        .catchError((onError) => print("Failed to add locations $onError"));
+    bool isUserEntry = false;
+    if (_addedEntries.length != 0) {
+      for (int i = 0; i < _addedEntries.length; i++) {
+        if (_addedEntries[i] == user) {
+          isUserEntry = true;
+          break;
+        }
+      }
+    }
+    if (!isUserEntry) {
+      _addedEntries.add(user);
+      locations
+          .add({'user': user, 'latitud': latitud, 'longitud': longitud})
+          .then((value) => print("locations added"))
+          .catchError((onError) => print("Failed to add locations $onError"));
+    }
   }
 
-  updateEntry(LocationModel location, latitud, longitud, user) {
-    location.reference
-        .update({'user': user, 'latitud': latitud, 'longitud': longitud});
+  updateEntry(latitud, longitud) {
+    String user = FirebaseAuth.instance.currentUser!.uid;
+    if (_locations.length != 0) {
+      LocationModel location = _locations[0];
+      bool doesExist = false;
+      for (int i = 0; i < _locations.length; i++) {
+        if (_locations[i].user == user) {
+          location = _locations[i];
+          doesExist = true;
+          break;
+        }
+      }
+      if (doesExist) {
+        location.reference
+            .update({'user': user, 'latitud': latitud, 'longitud': longitud});
+      }
+    }
   }
 
-  deleteEntry(LocationModel location) {
-    location.reference.delete();
+  deleteEntry() {
+    String user = FirebaseAuth.instance.currentUser!.uid;
+    if (_locations.length != 0) {
+      LocationModel location = _locations[0];
+      bool doesExist = false;
+      for (int i = 0; i < _locations.length; i++) {
+        if (_locations[i].user == user) {
+          location = _locations[i];
+          doesExist = true;
+          break;
+        }
+      }
+      if (doesExist) {
+        location.reference.delete;
+      }
+    }
   }
 }
