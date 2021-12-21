@@ -27,15 +27,28 @@ class _State extends State<SignUpScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset(
+                  "assets/logo.png",
+                  height: 250,
+                ),
+              ),
+            ],
+          ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
             child: Text(
               "Crear cuenta",
               style: Theme.of(context).textTheme.headline1,
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 16, right: 16),
             child: TextField(
               key: const Key("signUpName"),
               controller: nameController,
@@ -46,7 +59,7 @@ class _State extends State<SignUpScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
             child: TextField(
               key: const Key("signUpEmail"),
               controller: emailController,
@@ -57,7 +70,7 @@ class _State extends State<SignUpScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
             child: TextField(
               key: const Key("signUpPassword"),
               controller: passwordController,
@@ -74,22 +87,14 @@ class _State extends State<SignUpScreen> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(14.0),
+                  padding: const EdgeInsets.only(left: 14, right: 14, top: 16),
                   child: ElevatedButton(
                     onPressed: () async {
-                      if (networkController.connectionType != 0) {
-                        var result = await AuthManagement.signUp(
-                            name: nameController.text,
-                            email: emailController.text,
-                            password: passwordController.text);
-                        controller.authenticated = result;
-                      } else {
-                        Get.showSnackbar(const GetSnackBar(
-                          message:
-                              "Debe estar conectado a internet para realizar esta acción.",
-                          duration: Duration(seconds: 2),
-                        ));
-                      }
+                      var result = await AuthManagement.signUp(
+                          name: nameController.text,
+                          email: emailController.text,
+                          password: passwordController.text);
+                      controller.authenticated = result;
                     },
                     child: const Text("Registrarse"),
                   ),

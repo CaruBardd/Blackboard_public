@@ -26,8 +26,22 @@ class _State extends State<LoginScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
+            children: <Widget>[
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset(
+                  "assets/logo.png",
+                  height: 250,
+                  // width: 100,
+                ),
+              ),
+            ],
+          ),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left: 5, right: 5, bottom: 5),
             child: Text(
               "Iniciar sesión",
               style: Theme.of(context)
@@ -36,7 +50,7 @@ class _State extends State<LoginScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(32.0),
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 20),
             child: TextField(
               key: const Key("signInEmail"),
               controller: emailController,
@@ -47,7 +61,8 @@ class _State extends State<LoginScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(32.0),
+            padding:
+                const EdgeInsets.only(left: 16, right: 16, top: 20, bottom: 16),
             child: TextField(
               key: const Key("signInPassword"),
               controller: passwordController,
@@ -64,7 +79,7 @@ class _State extends State<LoginScreen> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(100.0),
+                  padding: const EdgeInsets.only(left: 50, right: 50, top: 10),
                   child: ElevatedButton(
                     child: const Text("Login"), // boton de login
                     onPressed: () async {
@@ -74,11 +89,12 @@ class _State extends State<LoginScreen> {
                             password: passwordController.text);
                         controller.authenticated = result;
                       } else {
-                        Get.showSnackbar(const GetSnackBar(
-                          message:
-                              "Debe estar conectado a internet para realizar esta acción.",
-                          duration: Duration(seconds: 2),
-                        ));
+                        Get.showSnackbar(
+                          GetBar(
+                            message: "No estas conectado a la red",
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
                       }
                     },
                   ),
