@@ -5,20 +5,21 @@ import 'package:red_blackboard/ui/widgets/card.dart';
 
 class LocationCard extends StatelessWidget {
   final String title;
-  final double lat, long;
   final double? distance;
   final VoidCallback? onUpdate;
   final IconButton topLeftWidget;
+  final Widget latitudeWidget;
+  final Widget longitudeWidget;
 
   // PostCard constructor
   LocationCard(
       {Key? key,
       required this.title,
-      required this.lat,
-      required this.long,
       this.distance,
       this.onUpdate,
-      required this.topLeftWidget})
+      required this.topLeftWidget,
+      required this.latitudeWidget,
+      required this.longitudeWidget})
       : super(key: key);
 
   // We create a Stateless widget that contais an AppCard,
@@ -82,14 +83,8 @@ class LocationCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text(
-                '$lat',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              Text(
-                '$long',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
+              latitudeWidget,
+              longitudeWidget,
               if (distance != null)
                 Text(
                   '$distance Km',

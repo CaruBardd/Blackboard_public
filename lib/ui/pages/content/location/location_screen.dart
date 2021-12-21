@@ -6,6 +6,8 @@ import 'package:red_blackboard/domain/models/location_mode.dart';
 import 'package:red_blackboard/domain/models/record.dart';
 //import 'package:red_blackboard/domain/models/location_database.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/firestore_controller.dart';
+import 'package:red_blackboard/domain/use_cases/controllers/location.dart';
+import 'package:red_blackboard/domain/use_cases/controllers/location_management.dart';
 //import 'package:red_blackboard/domain/use_cases/controllers/location_controller.dart';
 import 'widgets/location_card.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -23,6 +25,8 @@ class LocationScreen extends StatefulWidget {
 class _State extends State<LocationScreen> with InternetConnectionContent {
   var _locationController = Get.put(FirebaseController());
   late Future<List<LocationModel>> futureLocations;
+  late LocationController gpsController;
+  late LocationManager manager;
   var _context;
   bool _myUserLeftWidget = false;
   final items = List<String>.generate(8, (i) => "Item $i");
@@ -39,6 +43,8 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
   void initState() {
     super.initState();
     _locationController.suscribeUpdates();
+    gpsController = Get.put(LocationController());
+    manager = LocationManager();
   }
 
   @override
@@ -59,8 +65,14 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
                 var element = _locationController.entries[index];
                 return LocationCard(
                     title: element.user,
-                    lat: element.latitud,
-                    long: element.longitud,
+                    latitudeWidget: Text(
+                      '${element.latitud}',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                    longitudeWidget: Text(
+                      '${element.latitud}',
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
                     topLeftWidget:
                         otherUsersTopLeft(element.latitud, element.longitud));
               });
@@ -121,12 +133,30 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
   IconButton myUserTopLeft() {
     if (!_myUserLeftWidget) {
       return IconButton(
-          onPressed: (() => _locationController.addEntry(13.46, 7.65)),
+          onPressed: (() {
+            if (!_myUserLeftWidget) {
+              _locationController.addEntry(
+                  gpsController.latitude, gpsController.longitude);
+              Get.snackbar('Ubicación Añadida',
+                  'Ahora tu ubicación es visible para los demás usuarios.');
+              _myUserLeftWidget = !_myUserLeftWidget;
+            } else {
+              _locationController.deleteEntry();
+              Get.snackbar('Ubicación Removida',
+                  'Tu ubicación ya no es visible para los demás usuarios.');
+              _myUserLeftWidget = !_myUserLeftWidget;
+            }
+          }),
           icon: const Icon(Icons.my_location_outlined),
           color: Theme.of(context).colorScheme.primary);
     } else {
       return IconButton(
-          onPressed: (() => _locationController.deleteEntry()),
+          onPressed: (() {
+            _locationController.deleteEntry();
+            Get.snackbar('Ubicación Removida',
+                'Tu ubicación ya no es visible para los demás usuarios.');
+            _myUserLeftWidget = !_myUserLeftWidget;
+          }),
           icon: const Icon(Icons.my_location_outlined),
           color: Theme.of(context).colorScheme.primary);
     }
@@ -142,10 +172,28 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
           LocationCard(
             key: const Key("myLocationCard"),
             title: 'MI UBICACIÓN',
-            lat: 11.004,
-            long: -74.721,
-            onUpdate: () {
-              _locationController.addEntry(13.46, 7.65);
+            latitudeWidget: Obx(() {
+              return Text(
+                '${gpsController.latitude.value}',
+                style: Theme.of(context).textTheme.bodyText1,
+              );
+            }),
+            longitudeWidget: Obx(() {
+              return Text(
+                '${gpsController.longitude.value}',
+                style: Theme.of(context).textTheme.bodyText1,
+              );
+            }),
+            onUpdate: () async {
+              gpsController.location.value = null;
+              final position = await manager.getCurrentLocation();
+              gpsController.location.value = position;
+              gpsController.latitude.value = position.latitude;
+              gpsController.longitude.value = position.longitude;
+              Get.snackbar('Tu ubicación es...',
+                  'Latitud ${position.latitude} - Longitud: ${position.longitude}');
+              _locationController.addEntry(
+                  position.latitude, position.longitude);
             },
             topLeftWidget: myUserTopLeft(),
           ),
