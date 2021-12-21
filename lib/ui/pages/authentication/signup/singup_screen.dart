@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:red_blackboard/domain/use_cases/auth_management.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/internet_connection.dart';
+import 'package:blackboard_public/domain/use_cases/auth_management.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/authentication.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/internet_connection.dart';
 
 class SignUpScreen extends StatefulWidget {
   final VoidCallback onViewSwitch;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:red_blackboard/domain/services/internet_connection_binding.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/ui.dart';
-import 'package:red_blackboard/ui/pages/authentication/auth_page.dart';
-import 'package:red_blackboard/ui/pages/content/content_page.dart';
-import 'package:red_blackboard/ui/theme/theme.dart';
+import 'package:blackboard_public/domain/services/internet_connection_binding.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/authentication.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/ui.dart';
+import 'package:blackboard_public/ui/pages/authentication/auth_page.dart';
+import 'package:blackboard_public/ui/pages/content/content_page.dart';
+import 'package:blackboard_public/ui/theme/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class App extends StatelessWidget {

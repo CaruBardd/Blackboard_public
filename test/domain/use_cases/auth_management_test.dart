@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:red_blackboard/domain/use_cases/auth_management.dart';
+import 'package:blackboard_public/domain/use_cases/auth_management.dart';
 
 void main() {
   // AuthManagement uses Auth for management

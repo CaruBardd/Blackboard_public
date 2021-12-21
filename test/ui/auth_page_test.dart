@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
-import 'package:red_blackboard/ui/pages/authentication/auth_page.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/authentication.dart';
+import 'package:blackboard_public/ui/pages/authentication/auth_page.dart';
 
 void main() {
   final TestWidgetsFlutterBinding binding =

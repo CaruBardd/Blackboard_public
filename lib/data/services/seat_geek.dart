@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:red_blackboard/domain/models/social_event_serializer.dart';
-import 'package:red_blackboard/domain/services/http_get_interface.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/internet_connection.dart';
+import 'package:blackboard_public/domain/models/social_event_serializer.dart';
+import 'package:blackboard_public/domain/services/http_get_interface.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/internet_connection.dart';
 
 // Clase SeatGeekService
 //  - Implementar la Interfaz de HttpGetInterface

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart';
-import 'package:red_blackboard/ui/widgets/card.dart';
+import 'package:blackboard_public/ui/widgets/card.dart';
 
 class LocationCard extends StatelessWidget {
   final String title;
   final double? distance;
   final VoidCallback? onUpdate;
-  final IconButton topLeftWidget;
+  final Widget topLeftWidget;
   final Widget latitudeWidget;
   final Widget longitudeWidget;
 

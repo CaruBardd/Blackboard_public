@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:red_blackboard/ui/widgets/card.dart';
+import 'package:blackboard_public/ui/widgets/card.dart';
 
 class PostCard extends StatelessWidget {
   final String title, content, picUrl;

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:loggy/loggy.dart';
-import 'package:red_blackboard/domain/models/record.dart';
+import 'package:blackboard_public/domain/models/record.dart';
 
 class FirebaseController extends GetxController {
   var _locations = <LocationModel>[].obs;
@@ -59,39 +59,31 @@ class FirebaseController extends GetxController {
     String user = FirebaseAuth.instance.currentUser!.uid;
     if (_locations.length != 0) {
       LocationModel location = _locations[0];
-      bool doesExist = false;
       for (int i = 0; i < _locations.length; i++) {
         if (_locations[i].user == user) {
           location = _locations[i];
-          doesExist = true;
+          location.reference
+              .update({'user': user, 'latitud': latitud, 'longitud': longitud});
           break;
         }
-      }
-      if (doesExist) {
-        location.reference
-            .update({'user': user, 'latitud': latitud, 'longitud': longitud});
       }
     }
   }
 
   deleteEntry() {
     String user = FirebaseAuth.instance.currentUser!.uid;
-    if (isUserEntry.value) {
-      if (_locations.length != 0) {
-        LocationModel location = _locations[0];
-        bool doesExist = false;
-        for (int i = 0; i < _locations.length; i++) {
-          if (_locations[i].user == user) {
-            location = _locations[i];
-            doesExist = true;
-            break;
-          }
-        }
-        if (doesExist) {
-          location.reference.delete;
-          isUserEntry.value = false;
-        }
+    LocationModel location = _locations[0];
+    bool doesExist = false;
+    for (int i = 0; i < _locations.length; i++) {
+      if (_locations[i].user == user) {
+        location = _locations[i];
+        doesExist = true;
+        break;
       }
+    }
+    if (doesExist) {
+      location.reference.delete;
+      isUserEntry.value = false;
     }
   }
 }

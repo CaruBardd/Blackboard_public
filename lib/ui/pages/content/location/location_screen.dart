@@ -1,14 +1,13 @@
+import 'package:blackboard_public/domain/use_cases/controllers/my_location_widget_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:red_blackboard/domain/models/internet_connection_content.dart';
-import 'package:red_blackboard/domain/models/location_mode.dart';
-import 'package:red_blackboard/domain/models/record.dart';
-//import 'package:red_blackboard/domain/models/location_database.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/firestore_controller.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/location.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/location_management.dart';
-//import 'package:red_blackboard/domain/use_cases/controllers/location_controller.dart';
+import 'package:blackboard_public/domain/models/internet_connection_content.dart';
+import 'package:blackboard_public/domain/models/location_mode.dart';
+import 'package:blackboard_public/domain/models/record.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/firestore_controller.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/location.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/location_management.dart';
 import 'widgets/location_card.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -27,6 +26,8 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
   late Future<List<LocationModel>> futureLocations;
   late LocationController gpsController;
   late LocationManager manager;
+  late MyLocationWidgetController widgetController =
+      Get.put(MyLocationWidgetController());
   var _context;
   bool _myUserLeftWidget = false;
   final items = List<String>.generate(8, (i) => "Item $i");
@@ -44,12 +45,14 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
     super.initState();
     _locationController.suscribeUpdates();
     gpsController = Get.put(LocationController());
+    widgetController = Get.put(MyLocationWidgetController());
     manager = LocationManager();
   }
 
   @override
   void dispose() {
     _locationController.unsuscribeUpdates();
+    widgetController.setValue();
     super.dispose();
   }
 
@@ -58,7 +61,7 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
       if (_locationController.entries.length > 0) {
         return GetX<FirebaseController>(builder: (builderController) {
           return ListView.builder(
-              scrollDirection: Axis.vertical,
+              physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               itemCount: _locationController.entries.length,
               itemBuilder: (_context, index) {
@@ -70,7 +73,7 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     longitudeWidget: Text(
-                      '${element.latitud}',
+                      '${element.longitud}',
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                     topLeftWidget:
@@ -130,36 +133,31 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
             'https://www.google.com/maps/search/?api=1&query=${latitud.toString()},${longitud.toString()}'));
   }
 
-  IconButton myUserTopLeft() {
-    if (!_myUserLeftWidget) {
-      return IconButton(
-          onPressed: (() {
-            if (!_myUserLeftWidget) {
+  Widget myUserTopLeft() {
+    return Obx(() {
+      if (widgetController.getValue() == false) {
+        return IconButton(
+            onPressed: (() {
               _locationController.addEntry(
                   gpsController.latitude, gpsController.longitude);
-              Get.snackbar('Ubicación Añadida',
+              Get.snackbar('Compartiendo ubicación',
                   'Ahora tu ubicación es visible para los demás usuarios.');
-              _myUserLeftWidget = !_myUserLeftWidget;
-            } else {
+              widgetController.toogleValue();
+            }),
+            icon: const Icon(Icons.my_location_outlined),
+            color: Theme.of(context).colorScheme.primary);
+      } else {
+        return IconButton(
+            onPressed: (() {
               _locationController.deleteEntry();
-              Get.snackbar('Ubicación Removida',
+              Get.snackbar('Ubicación removida',
                   'Tu ubicación ya no es visible para los demás usuarios.');
-              _myUserLeftWidget = !_myUserLeftWidget;
-            }
-          }),
-          icon: const Icon(Icons.my_location_outlined),
-          color: Theme.of(context).colorScheme.primary);
-    } else {
-      return IconButton(
-          onPressed: (() {
-            _locationController.deleteEntry();
-            Get.snackbar('Ubicación Removida',
-                'Tu ubicación ya no es visible para los demás usuarios.');
-            _myUserLeftWidget = !_myUserLeftWidget;
-          }),
-          icon: const Icon(Icons.my_location_outlined),
-          color: Theme.of(context).colorScheme.primary);
-    }
+              widgetController.toogleValue();
+            }),
+            icon: const Icon(Icons.location_disabled_outlined),
+            color: Theme.of(context).colorScheme.primary);
+      }
+    });
   }
 
   @override
@@ -190,9 +188,9 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
               gpsController.location.value = position;
               gpsController.latitude.value = position.latitude;
               gpsController.longitude.value = position.longitude;
-              Get.snackbar('Tu ubicación es...',
+              Get.snackbar('Ubicación actualizada',
                   'Latitud ${position.latitude} - Longitud: ${position.longitude}');
-              _locationController.addEntry(
+              _locationController.updateEntry(
                   position.latitude, position.longitude);
             },
             topLeftWidget: myUserTopLeft(),

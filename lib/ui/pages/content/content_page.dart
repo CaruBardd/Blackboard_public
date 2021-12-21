@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:red_blackboard/domain/models/internet_connection_content.dart';
-import 'package:red_blackboard/domain/use_cases/auth_management.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/authentication.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/permissions_controller.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/ui.dart';
-import 'package:red_blackboard/ui/pages/content/location/location_screen.dart';
-import 'package:red_blackboard/ui/pages/content/public_offers/social_events_screen.dart';
-import 'package:red_blackboard/ui/pages/content/states/states_screen.dart';
-import 'package:red_blackboard/ui/pages/content/users_offers/users_offers_screen.dart';
-import 'package:red_blackboard/ui/widgets/appbar.dart';
+import 'package:blackboard_public/domain/models/internet_connection_content.dart';
+import 'package:blackboard_public/domain/use_cases/auth_management.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/authentication.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/permissions_controller.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/ui.dart';
+import 'package:blackboard_public/ui/pages/content/location/location_screen.dart';
+import 'package:blackboard_public/ui/pages/content/public_offers/social_events_screen.dart';
+import 'package:blackboard_public/ui/pages/content/states/states_screen.dart';
+import 'package:blackboard_public/ui/pages/content/users_offers/users_offers_screen.dart';
+import 'package:blackboard_public/ui/widgets/appbar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'chat/chat_screen.dart';

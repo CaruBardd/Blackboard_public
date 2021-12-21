@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:red_blackboard/data/repositories/auth.dart';
+import 'package:blackboard_public/data/repositories/auth.dart';
 
 void main() {
   late Auth auth;

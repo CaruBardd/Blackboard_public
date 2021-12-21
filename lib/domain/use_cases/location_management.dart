@@ -1,5 +1,5 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:red_blackboard/data/services/geolocation.dart';
+import 'package:blackboard_public/data/services/geolocation.dart';
 
 class LocationManager {
   final gpsService = GpsService();

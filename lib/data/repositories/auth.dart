@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
-import 'package:red_blackboard/domain/repositorires/auth.dart';
+import 'package:blackboard_public/domain/repositorires/auth.dart';
 
 class Auth implements AuthInterface {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -13,7 +13,7 @@ class Auth implements AuthInterface {
     try {
       UserCredential user = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-         if (user.user != null) {
+      if (user.user != null) {
         print('login success');
         return true;
       }

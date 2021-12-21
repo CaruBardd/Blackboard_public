@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:red_blackboard/data/services/seat_geek.dart';
-import 'package:red_blackboard/domain/models/internet_connection_content.dart';
-import 'package:red_blackboard/domain/models/social_event_serializer.dart';
-import 'package:red_blackboard/ui/pages/content/public_offers/widgets/event_card.dart';
+import 'package:blackboard_public/data/services/seat_geek.dart';
+import 'package:blackboard_public/domain/models/internet_connection_content.dart';
+import 'package:blackboard_public/domain/models/social_event_serializer.dart';
+import 'package:blackboard_public/ui/pages/content/public_offers/widgets/event_card.dart';
 
 // Clase SocialEventScreen
 //  - Extiende a la clase StatefulWidget

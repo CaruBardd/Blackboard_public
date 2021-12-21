@@ -1,5 +1,5 @@
 import 'package:geolocator/geolocator.dart';
-import 'package:red_blackboard/domain/services/location.dart';
+import 'package:blackboard_public/domain/services/location.dart';
 
 class GpsService implements LocationInterface {
   @override

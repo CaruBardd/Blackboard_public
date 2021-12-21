@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:red_blackboard/domain/use_cases/controllers/internet_connection.dart';
+import 'package:blackboard_public/domain/use_cases/controllers/internet_connection.dart';
 
 // Clase InternetConnectionContent
 //  - Determina el contenido que será lanzado a partir de la conexión a internet.
