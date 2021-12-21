@@ -1,10 +1,40 @@
 {
   "project_info": {
     "project_number": "391469083568",
+    "firebase_url": "https://blackboard-6657d-default-rtdb.firebaseio.com",
     "project_id": "blackboard-6657d",
     "storage_bucket": "blackboard-6657d.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391469083568:android:9b24856b52d6884187c475",
+        "android_client_info": {
+          "package_name": "com.example.blackboard_public"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391469083568-19r3od7ae2qi474tiucdn0rmplla1hks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL5qBoWXACHdjrdKvvkco4tHJUwASA8mg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391469083568-19r3od7ae2qi474tiucdn0rmplla1hks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:391469083568:android:95621a56ea97ab7787c475",

@@ -12,14 +12,11 @@ Future<void> main() async {
       // Replace with actual values
       options: const FirebaseOptions(
         apiKey: "AIzaSyAX_hbklUzB_n3gUckmD_I1tBMswMsZ5u8",
-        appId: "1:391469083568:android:95621a56ea97ab7787c475",
+        appId: "1:391469083568:android:9b24856b52d6884187c475",
         messagingSenderId: "391469083568",
         projectId: "blackboard-6657d",
       ),
     );
-
-
-    
   } on FirebaseException catch (e) {
     if (e.code == 'duplicate-app') {
       // you can choose not to do anything here or either
