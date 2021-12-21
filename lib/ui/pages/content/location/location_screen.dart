@@ -8,6 +8,7 @@ import 'package:red_blackboard/domain/models/record.dart';
 import 'package:red_blackboard/domain/use_cases/controllers/firestore_controller.dart';
 //import 'package:red_blackboard/domain/use_cases/controllers/location_controller.dart';
 import 'widgets/location_card.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final databaseRef = FirebaseDatabase.instance.reference();
 
@@ -23,6 +24,7 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
   var _locationController = Get.put(FirebaseController());
   late Future<List<LocationModel>> futureLocations;
   var _context;
+  bool _myUserLeftWidget = false;
   final items = List<String>.generate(8, (i) => "Item $i");
   final List<String> nombres = <String>[
     'Julio Mendoza',
@@ -58,7 +60,9 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
                 return LocationCard(
                     title: element.user,
                     lat: element.latitud,
-                    long: element.longitud);
+                    long: element.longitud,
+                    topLeftWidget:
+                        otherUsersTopLeft(element.latitud, element.longitud));
               });
         });
       } else {
@@ -106,6 +110,28 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
     return isConnected();
   }
 
+  IconButton otherUsersTopLeft(double latitud, double longitud) {
+    return IconButton(
+        icon: const Icon(Icons.near_me_outlined),
+        color: Theme.of(context).colorScheme.primary,
+        onPressed: () => launch(
+            'https://www.google.com/maps/search/?api=1&query=${latitud.toString()},${longitud.toString()}'));
+  }
+
+  IconButton myUserTopLeft() {
+    if (!_myUserLeftWidget) {
+      return IconButton(
+          onPressed: (() => _locationController.addEntry(13.46, 7.65)),
+          icon: const Icon(Icons.my_location_outlined),
+          color: Theme.of(context).colorScheme.primary);
+    } else {
+      return IconButton(
+          onPressed: (() => _locationController.deleteEntry()),
+          icon: const Icon(Icons.my_location_outlined),
+          color: Theme.of(context).colorScheme.primary);
+    }
+  }
+
   @override
   Widget mainWidget() {
     return SingleChildScrollView(
@@ -118,7 +144,10 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
             title: 'MI UBICACIÓN',
             lat: 11.004,
             long: -74.721,
-            onUpdate: () => _locationController.addEntry(10.45, 56.21),
+            onUpdate: () {
+              _locationController.addEntry(13.46, 7.65);
+            },
+            topLeftWidget: myUserTopLeft(),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 12.0),
@@ -128,25 +157,6 @@ class _State extends State<LocationScreen> with InternetConnectionContent {
             ),
           ),
           _list()
-          // ListView on remaining screen space
-          /*ListView.builder(
-            itemCount: nombres.length,
-            itemBuilder: (context, index) {
-              //index es la variable iteradora: puede ser [0,1,2,3...n], donde n es la posicion final la lista
-              return Obx(() => LocationCard(
-                    title: nombres[index],
-                    lat: _controller.latitud[index].value,
-                    long: _controller.longitud[index].value,
-                    distance: _controller.distancia[index].value,
-                    onUpdate: () {
-                      _controller.updateLocation(index);
-                    },
-                  ));
-            },
-            // Avoid scrollable inside scrollable
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-          ),*/
         ],
       ),
     );

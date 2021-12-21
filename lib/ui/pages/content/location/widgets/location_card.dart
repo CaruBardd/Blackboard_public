@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:http/http.dart';
 import 'package:red_blackboard/ui/widgets/card.dart';
 
 class LocationCard extends StatelessWidget {
@@ -6,19 +8,39 @@ class LocationCard extends StatelessWidget {
   final double lat, long;
   final double? distance;
   final VoidCallback? onUpdate;
+  final IconButton topLeftWidget;
 
   // PostCard constructor
-  const LocationCard(
+  LocationCard(
       {Key? key,
       required this.title,
       required this.lat,
       required this.long,
       this.distance,
-      this.onUpdate})
+      this.onUpdate,
+      required this.topLeftWidget})
       : super(key: key);
 
   // We create a Stateless widget that contais an AppCard,
   // Passing all the customizable views as parameters
+
+  Widget topRightIconButton(Color primaryColor) {
+    if (onUpdate != null) {
+      return IconButton(
+        icon: Icon(
+          Icons.restart_alt_outlined,
+          color: primaryColor,
+        ),
+        onPressed: onUpdate,
+      );
+    } else {
+      return const SizedBox(
+        height: 1,
+        width: 1,
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Color primaryColor = Theme.of(context).colorScheme.primary;
@@ -26,26 +48,10 @@ class LocationCard extends StatelessWidget {
       key: const Key("locationCard"),
       title: title,
       // topLeftWidget widget as an Icon
-      topLeftWidget: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Icon(
-          onUpdate != null
-              ? Icons.my_location_outlined
-              : Icons.near_me_outlined,
-          color: primaryColor,
-        ),
-      ),
+      topLeftWidget:
+          Padding(padding: const EdgeInsets.all(24.0), child: topLeftWidget),
       // topRightWidget widget as an IconButton or null
-
-      topRightWidget: onUpdate != null
-          ? IconButton(
-              icon: Icon(
-                Icons.sync_outlined,
-                color: primaryColor,
-              ),
-              onPressed: onUpdate,
-            )
-          : null,
+      topRightWidget: topRightIconButton(primaryColor),
       content: Row(
         mainAxisSize: MainAxisSize.max,
         children: [

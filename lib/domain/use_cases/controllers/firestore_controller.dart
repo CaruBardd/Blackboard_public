@@ -8,6 +8,7 @@ import 'package:red_blackboard/domain/models/record.dart';
 
 class FirebaseController extends GetxController {
   var _locations = <LocationModel>[].obs;
+  var isUserEntry = false.obs;
   final CollectionReference locations =
       FirebaseFirestore.instance.collection('locations');
   final Stream<QuerySnapshot> _usersStream =
@@ -35,21 +36,22 @@ class FirebaseController extends GetxController {
 
   addEntry(latitud, longitud) {
     String user = FirebaseAuth.instance.currentUser!.uid;
-    bool isUserEntry = false;
     if (_addedEntries.length != 0) {
       for (int i = 0; i < _addedEntries.length; i++) {
         if (_addedEntries[i] == user) {
-          isUserEntry = true;
+          isUserEntry.value = true;
           break;
         }
       }
     }
-    if (!isUserEntry) {
+    if (!isUserEntry.value) {
       _addedEntries.add(user);
       locations
           .add({'user': user, 'latitud': latitud, 'longitud': longitud})
           .then((value) => print("locations added"))
           .catchError((onError) => print("Failed to add locations $onError"));
+    } else {
+      updateEntry(latitud, longitud);
     }
   }
 
@@ -74,18 +76,21 @@ class FirebaseController extends GetxController {
 
   deleteEntry() {
     String user = FirebaseAuth.instance.currentUser!.uid;
-    if (_locations.length != 0) {
-      LocationModel location = _locations[0];
-      bool doesExist = false;
-      for (int i = 0; i < _locations.length; i++) {
-        if (_locations[i].user == user) {
-          location = _locations[i];
-          doesExist = true;
-          break;
+    if (isUserEntry.value) {
+      if (_locations.length != 0) {
+        LocationModel location = _locations[0];
+        bool doesExist = false;
+        for (int i = 0; i < _locations.length; i++) {
+          if (_locations[i].user == user) {
+            location = _locations[i];
+            doesExist = true;
+            break;
+          }
         }
-      }
-      if (doesExist) {
-        location.reference.delete;
+        if (doesExist) {
+          location.reference.delete;
+          isUserEntry.value = false;
+        }
       }
     }
   }
